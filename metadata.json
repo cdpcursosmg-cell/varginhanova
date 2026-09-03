@@ -1,0 +1,7 @@
+{
+  "name": "NOVA VARGINHA DIREITA",
+  "description": "Sistema de gestão inteligente para a Comunidade de Varginha. Controle de hidrômetros, faturamento de água e finanças.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
