@@ -142,6 +142,16 @@ export const WaterReadingsPage: React.FC<WaterReadingsPageProps> = ({
 }) => {
   const [selectedDate, setSelectedDate] = useState(new Date(2026, 2, 1)); 
   const [customDueDate, setCustomDueDate] = useState('2026-04-10');
+
+  // Atualiza automaticamente o vencimento para o dia 10 do mês subsequente quando o mês/ano de referência mudar
+  useEffect(() => {
+    const nextMonth = new Date(selectedDate.getFullYear(), selectedDate.getMonth() + 1, 10);
+    const y = nextMonth.getFullYear();
+    const m = String(nextMonth.getMonth() + 1).padStart(2, '0');
+    const d = String(nextMonth.getDate()).padStart(2, '0');
+    setCustomDueDate(`${y}-${m}-${d}`);
+  }, [selectedDate]);
+
   const [searchTerm, setSearchTerm] = useState('');
   const [readings, setReadings] = useState<Record<string, { current: string, previous: string }>>({});
   const [generatedDues, setGeneratedDues] = useState<MembershipDue[]>([]);
@@ -319,7 +329,7 @@ export const WaterReadingsPage: React.FC<WaterReadingsPageProps> = ({
   };
 
   const exportReadingsToCSV = () => {
-    const headers = ['Sócio', 'Referência', 'Leitura Anterior', 'Leitura Atual', 'Consumo (m³)', 'Preço por m³', 'Taxa Fixa', 'Valor Total'];
+    const headers = ['Sócio', 'Referência', 'Vencimento', 'Leitura Anterior', 'Leitura Atual', 'Consumo (m³)', 'Preço por m³', 'Taxa Fixa', 'Valor Total'];
     const rows = members.map(member => {
       const r = readings[member.id] || { current: '', previous: '0' };
       const prevVal = parseFloat(r.previous) || 0;
@@ -330,6 +340,7 @@ export const WaterReadingsPage: React.FC<WaterReadingsPageProps> = ({
       return [
         member.name,
         `${monthStr}/${year}`,
+        customDueDate,
         prevVal,
         currVal,
         cons,
@@ -366,6 +377,7 @@ export const WaterReadingsPage: React.FC<WaterReadingsPageProps> = ({
       return {
         'Sócio': member.name,
         'Referência': `${monthStr}/${year}`,
+        'Vencimento': customDueDate,
         'Leitura Anterior': prevVal,
         'Leitura Atual': currVal,
         'Consumo (m³)': cons,
@@ -462,7 +474,7 @@ export const WaterReadingsPage: React.FC<WaterReadingsPageProps> = ({
         </header>
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
-            <div className="lg:col-span-3 bg-white p-6 rounded-3xl shadow-sm border border-gray-100 grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="lg:col-span-3 bg-white p-6 rounded-3xl shadow-sm border border-gray-100 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div>
                     <label className="block text-xs font-bold text-gray-400 uppercase mb-2">Mês/Ano</label>
                     <input 
@@ -476,39 +488,47 @@ export const WaterReadingsPage: React.FC<WaterReadingsPageProps> = ({
                     />
                 </div>
                 <div>
+                    <label className="block text-xs font-bold text-gray-400 uppercase mb-2">Data de Vencimento</label>
+                    <input 
+                        type="date" 
+                        value={customDueDate}
+                        onChange={(e) => setCustomDueDate(e.target.value)}
+                        className="w-full bg-emerald-50 text-emerald-900 border border-emerald-200 rounded-xl p-3 font-bold focus:ring-2 focus:ring-emerald-500" 
+                    />
+                </div>
+                <div>
                     <label className="block text-xs font-bold text-gray-400 uppercase mb-2">Energia (R$)</label>
                     <div className="flex gap-2">
                         <input 
                             type="number" 
                             value={energyBill} 
                             onChange={(e) => setEnergyBill(e.target.value)} 
-                            className="flex-1 bg-emerald-50 text-emerald-900 border-none rounded-xl p-3 font-bold focus:ring-2 focus:ring-emerald-500" 
+                            className="flex-1 min-w-0 bg-emerald-50 text-emerald-900 border-none rounded-xl p-3 font-bold focus:ring-2 focus:ring-emerald-500" 
                             placeholder="0,00"
                         />
                         <button 
                             onClick={handleCalculateRateio}
-                            className="px-3 bg-emerald-600 text-white rounded-xl hover:bg-emerald-700 transition-colors"
+                            className="px-3 bg-emerald-600 text-white rounded-xl hover:bg-emerald-700 transition-colors shrink-0"
                             title="Calcular Rateio"
                         >
                             <CogIcon className="w-5 h-5" />
                         </button>
                     </div>
                 </div>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 gap-2">
                     <div>
-                        <label className="block text-xs font-bold text-gray-400 uppercase mb-2">Preço m³ (Rateio)</label>
+                        <label className="block text-xs font-bold text-gray-400 uppercase mb-2 truncate">Preço m³</label>
                         <div className="w-full bg-emerald-50 text-emerald-900 rounded-xl p-3 font-black flex items-center justify-between border border-emerald-100">
-                            <span>R$ {(waterPrice || 0).toFixed(4)}</span>
-                            <span className="text-[8px] bg-emerald-200 px-1 rounded uppercase">Auto</span>
+                            <span className="text-xs">R$ {(waterPrice || 0).toFixed(4)}</span>
                         </div>
                     </div>
                     <div>
-                        <label className="block text-xs font-bold text-gray-400 uppercase mb-2">Taxa de Serviço (R$)</label>
+                        <label className="block text-xs font-bold text-gray-400 uppercase mb-2 truncate">Taxa (R$)</label>
                         <input 
                             type="number" 
                             value={serviceFee} 
                             onChange={(e) => setServiceFee(parseFloat(e.target.value) || 0)} 
-                            className="w-full bg-emerald-50 text-emerald-900 border-none rounded-xl p-3 font-black focus:ring-2 focus:ring-emerald-500" 
+                            className="w-full bg-emerald-50 text-emerald-900 border-none rounded-xl p-3 font-black focus:ring-2 focus:ring-emerald-500 text-xs" 
                             placeholder="0,00"
                         />
                     </div>

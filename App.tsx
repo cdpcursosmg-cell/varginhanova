@@ -107,7 +107,9 @@ export const importedData = [
     { name: "AUGUSTO BB", prev: 0, curr: 539 },
     { name: "NELZITA BB", prev: 0, curr: 31 },
     { name: "SELSO BB", prev: 0, curr: 211 },
-    { name: "LIN BB", prev: 0, curr: 144 }
+    { name: "LIN BB", prev: 0, curr: 144 },
+    { name: "NILTIN MENDES", prev: 0, curr: 157 },
+    { name: "DEZIN", prev: 0, curr: 66 }
 ];
 
 const DEFAULT_WATER_PRICE = 1.50;
@@ -150,6 +152,31 @@ const App: React.FC = () => {
   const [activeView, setActiveView] = useState<View>('dashboard');
   
   const [members, setMembers] = usePersistentState<Member[]>('app_members_v10', initialMembers);
+
+  // Auto-sincronizar novos membros da lista oficial com o estado persistente
+  useEffect(() => {
+    const normalize = (s: string) => s.toUpperCase().trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^A-Z0-9]/g, "");
+    setMembers(prev => {
+      const existingNames = new Set(prev.map(m => normalize(m.name)));
+      const missing = importedData.filter(d => !existingNames.has(normalize(d.name)));
+      if (missing.length === 0) return prev;
+      
+      const newMembers: Member[] = missing.map((d, index) => ({
+        id: `m_${Date.now()}_${index}`,
+        name: d.name,
+        initialReading: d.prev,
+        cpf: `000.000.000-00`,
+        address: 'Comunidade de Varginha',
+        email: '',
+        phone: '',
+        joinDate: '2026-03-01',
+        category: 'Produtor',
+        status: MemberStatus.Ativo,
+        naturalness: 'São João da Ponte – MG'
+      }));
+      return [...prev, ...newMembers];
+    });
+  }, [setMembers]);
   const [dues, setDues] = usePersistentState<MembershipDue[]>('app_dues_v10', []);
   const [expenses, setExpenses] = usePersistentState<Expense[]>('app_expenses_v10', []);
   const [meetings, setMeetings] = usePersistentState<Meeting[]>('app_meetings_v10', []);
