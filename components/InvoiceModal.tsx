@@ -139,6 +139,10 @@ const WaterBill: React.FC<{ due: MembershipDue }> = ({ due }) => {
 export const InvoiceModal: React.FC<InvoiceModalProps> = ({ isOpen, onClose, dues }) => {
   if (!isOpen || dues.length === 0) return null;
 
+  const sortedDues = [...dues].sort((a, b) => 
+    a.memberName.localeCompare(b.memberName, 'pt-BR', { sensitivity: 'base' })
+  );
+
   const handlePrint = () => {
       const content = document.getElementById('printable-area');
       if (!content) return;
@@ -178,7 +182,7 @@ export const InvoiceModal: React.FC<InvoiceModalProps> = ({ isOpen, onClose, due
       </div>
 
       <div id="printable-area" className="bg-gray-200 p-2 rounded-xl max-h-[70vh] overflow-y-auto border border-gray-300">
-        {dues.map(due => <WaterBill key={due.id} due={due} />)}
+        {sortedDues.map(due => <WaterBill key={due.id} due={due} />)}
       </div>
       
       <div className="mt-4 text-center">

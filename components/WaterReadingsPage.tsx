@@ -160,6 +160,10 @@ export const WaterReadingsPage: React.FC<WaterReadingsPageProps> = ({
   const [startInvoiceNumber, setStartInvoiceNumber] = useState<number>(1);
   const [selectedHistoryMember, setSelectedHistoryMember] = useState<Member | null>(null);
 
+  const sortedMembers = useMemo(() => {
+    return [...members].sort((a, b) => a.name.localeCompare(b.name, 'pt-BR', { sensitivity: 'base' }));
+  }, [members]);
+
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleExcelImport = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -289,7 +293,7 @@ export const WaterReadingsPage: React.FC<WaterReadingsPageProps> = ({
     const newBills: MembershipDue[] = [];
     let counter = startInvoiceNumber;
 
-    members.forEach(member => {
+    sortedMembers.forEach(member => {
         const r = readings[member.id];
         if (r && r.current) {
             const consumption = parseFloat(r.current) - parseFloat(r.previous);
@@ -330,7 +334,7 @@ export const WaterReadingsPage: React.FC<WaterReadingsPageProps> = ({
 
   const exportReadingsToCSV = () => {
     const headers = ['Sócio', 'Referência', 'Vencimento', 'Leitura Anterior', 'Leitura Atual', 'Consumo (m³)', 'Preço por m³', 'Taxa Fixa', 'Valor Total'];
-    const rows = members.map(member => {
+    const rows = sortedMembers.map(member => {
       const r = readings[member.id] || { current: '', previous: '0' };
       const prevVal = parseFloat(r.previous) || 0;
       const currVal = parseFloat(r.current) || 0;
@@ -367,7 +371,7 @@ export const WaterReadingsPage: React.FC<WaterReadingsPageProps> = ({
   };
 
   const exportReadingsToExcel = () => {
-    const data = members.map(member => {
+    const data = sortedMembers.map(member => {
       const r = readings[member.id] || { current: '', previous: '0' };
       const prevVal = parseFloat(r.previous) || 0;
       const currVal = parseFloat(r.current) || 0;
@@ -634,7 +638,7 @@ export const WaterReadingsPage: React.FC<WaterReadingsPageProps> = ({
                     </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-50">
-                    {members.filter(m => m.name.toLowerCase().includes(searchTerm.toLowerCase())).map(member => {
+                    {sortedMembers.filter(m => m.name.toLowerCase().includes(searchTerm.toLowerCase())).map(member => {
                         const r = readings[member.id] || { current: '', previous: '0' };
                         const cons = parseFloat(r.current) - parseFloat(r.previous);
                         const final = ((cons > 0 ? cons : 0) * waterPrice) + serviceFee;

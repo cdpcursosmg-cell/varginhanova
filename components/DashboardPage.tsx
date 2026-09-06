@@ -1,40 +1,24 @@
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Member, MembershipDue, Meeting, MemberStatus, PaymentStatus } from '../types';
 import { UsersIcon, DollarSignIcon, WaterDropIcon, CalendarIcon, CogIcon } from './Icons';
-import { GoogleGenAI } from '@google/genai';
 
 interface DashboardPageProps {
   members: Member[];
   dues: MembershipDue[];
   meetings: Meeting[];
+  onNavigate?: (view: 'members' | 'readings' | 'financials' | 'calendar' | 'backup') => void;
 }
 
-const StatCard: React.FC<{ title: string; value: string | number; icon: React.ReactNode; colorClass: string; trend?: string }> = ({ title, value, icon, colorClass, trend }) => (
-  <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex flex-col justify-between hover:shadow-md transition-shadow">
-    <div className="flex justify-between items-start">
-      <div className={`p-3 rounded-xl ${colorClass}`}>
-        {icon}
-      </div>
-      {trend && <span className="text-xs font-bold text-green-500 bg-green-50 px-2 py-1 rounded-lg">{trend}</span>}
-    </div>
-    <div className="mt-4">
-      <p className="text-sm font-medium text-gray-500 uppercase tracking-wider">{title}</p>
-      <p className="text-3xl font-extrabold text-gray-900 mt-1">{value}</p>
-    </div>
-  </div>
-);
-
-export const DashboardPage: React.FC<DashboardPageProps> = ({ members, dues, meetings }) => {
-  const [aiInsight, setAiInsight] = useState<string | null>(null);
-  const [loadingAi, setLoadingAi] = useState(false);
-
+export const DashboardPage: React.FC<DashboardPageProps> = ({ members, dues, meetings, onNavigate }) => {
   const activeMembers = members.filter(m => m.status === MemberStatus.Ativo).length;
-  const pendingAmount = dues.filter(d => d.status !== PaymentStatus.Pago).reduce((acc, d) => acc + d.amount, 0);
+  const pendingDues = dues.filter(d => d.status !== PaymentStatus.Pago);
+  const pendingAmount = pendingDues.reduce((acc, d) => acc + d.amount, 0);
+  const paidDues = dues.filter(d => d.status === PaymentStatus.Pago);
+  const paidAmount = paidDues.reduce((acc, d) => acc + d.amount, 0);
   const totalConsumption = dues.filter(d => d.readingDetails).reduce((acc, d) => acc + (d.readingDetails?.consumption || 0), 0);
-  const nextMeeting = meetings.length > 0 ? new Date(meetings[0].date).toLocaleDateString('pt-BR') : 'Nenhuma';
 
-  // Encontrar o valor do rateio mais recente
+  // Rateio mais recente
   const latestDueWithReading = [...dues].sort((a, b) => {
     if (a.year !== b.year) return b.year - a.year;
     const months = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
@@ -43,145 +27,169 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ members, dues, mee
 
   const currentRateio = latestDueWithReading?.readingDetails?.pricePerCubicMeter || 0;
   const lastEnergyBill = latestDueWithReading?.readingDetails?.totalEnergyBill || 0;
-  const lastSystemConsumption = latestDueWithReading?.readingDetails?.totalSystemConsumption || 0;
-
-  const generateAIInsight = async () => {
-    setLoadingAi(true);
-    try {
-      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-      const prompt = `Analise os dados desta associação rural e forneça um resumo motivacional de 2 parágrafos:
-      - Localidade: COMUNIDADE DE VARGINHA
-      - Total de Sócios: ${members.length}
-      - Sócios Ativos: ${activeMembers}
-      - Valor a Receber: R$ ${(pendingAmount || 0).toFixed(2)}
-      - Consumo Total Acumulado: ${(totalConsumption || 0).toFixed(0)} m³
-      - Última Conta de Energia: R$ ${(lastEnergyBill || 0).toFixed(2)}
-      - Consumo do Sistema (Último Rateio): ${(lastSystemConsumption || 0).toFixed(0)} m³
-      - Valor do Rateio (Preço m³): R$ ${(currentRateio || 0).toFixed(4)}
-      - Taxa de Serviço (Manutenção): R$ ${(latestDueWithReading?.readingDetails?.serviceFee || 0).toFixed(2)}
-      Seja profissional e focado em gestão comunitária.`;
-      
-      const response = await ai.models.generateContent({
-        model: 'gemini-3-flash-preview',
-        contents: prompt
-      });
-      setAiInsight(response.text);
-    } catch (error) {
-      setAiInsight("Mantenha o foco na gestão eficiente e no desenvolvimento da Comunidade de Varginha!");
-    } finally {
-      setLoadingAi(false);
-    }
-  };
-
-  useEffect(() => {
-    generateAIInsight();
-  }, []);
+  const lastReference = latestDueWithReading ? `${latestDueWithReading.month}/${latestDueWithReading.year}` : 'Nenhuma';
+  const nextMeeting = meetings.length > 0 ? new Date(meetings[0].date).toLocaleDateString('pt-BR') : 'Sem reunião agendada';
 
   return (
-    <div className="p-8 space-y-8 animate-in fade-in duration-500">
-      <div className="flex justify-between items-end border-b border-gray-100 pb-6">
+    <div className="p-6 md:p-8 max-w-7xl mx-auto space-y-8">
+      {/* Cabeçalho Simples */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-gray-200 pb-5">
         <div>
-          <h1 className="text-4xl font-black text-gray-900 tracking-tight">COMUNIDADE DE VARGINHA</h1>
-          <p className="text-gray-500 font-medium uppercase text-xs tracking-widest mt-1">Gestão de Recursos Hídricos e Comunitários</p>
+          <h1 className="text-2xl md:text-3xl font-bold text-gray-900">Comunidade de Varginha</h1>
+          <p className="text-sm text-gray-500 mt-1">Resumo geral da associação e abastecimento de água</p>
         </div>
-        <div className="text-right hidden md:block">
-            <span className="text-xs font-bold text-gray-400 uppercase tracking-widest block">Status do Sistema</span>
-            <span className="font-mono text-emerald-600 font-bold uppercase text-xs">Operacional</span>
+        <div className="flex items-center gap-2 self-start md:self-auto bg-emerald-50 text-emerald-800 text-xs font-semibold px-3 py-1.5 rounded-full border border-emerald-200">
+          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          Sistema Operacional
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <StatCard 
-          title="Total de Sócios" 
-          value={members.length} 
-          icon={<UsersIcon className="w-6 h-6 text-emerald-600" />} 
-          colorClass="bg-emerald-50 text-emerald-600"
-        />
-        <StatCard 
-          title="Consumo de Água" 
-          value={`${(totalConsumption || 0).toFixed(0)} m³`} 
-          icon={<WaterDropIcon className="w-6 h-6 text-emerald-600" />} 
-          colorClass="bg-emerald-50 text-emerald-600"
-        />
-        <StatCard 
-          title="Última Conta de Energia" 
-          value={`R$ ${lastEnergyBill.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`} 
-          icon={<DollarSignIcon className="w-6 h-6 text-emerald-600" />} 
-          colorClass="bg-emerald-50 text-emerald-600"
-        />
-        <StatCard 
-          title="Consumo do Sistema" 
-          value={`${(lastSystemConsumption || 0).toFixed(0)} m³`} 
-          icon={<WaterDropIcon className="w-6 h-6 text-emerald-600" />} 
-          colorClass="bg-emerald-50 text-emerald-600"
-        />
-        <StatCard 
-          title="Valor do Rateio" 
-          value={`R$ ${currentRateio.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 4 })}`} 
-          icon={<CogIcon className="w-6 h-6 text-emerald-600" />} 
-          colorClass="bg-emerald-50 text-emerald-600"
-        />
-        <StatCard 
-          title="Pendente (AR)" 
-          value={`R$ ${pendingAmount.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`} 
-          icon={<DollarSignIcon className="w-6 h-6 text-amber-600" />} 
-          colorClass="bg-amber-50 text-amber-600"
-        />
-        <StatCard 
-          title="Próx. Reunião" 
-          value={nextMeeting} 
-          icon={<CalendarIcon className="w-6 h-6 text-purple-600" />} 
-          colorClass="bg-purple-50 text-purple-600"
-        />
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2 bg-gradient-to-br from-emerald-900 to-emerald-800 rounded-3xl p-8 text-white shadow-xl relative overflow-hidden">
-          <div className="relative z-10">
-            <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
-              <span className="bg-emerald-400 w-2 h-8 rounded-full"></span>
-              Visão Inteligente
-            </h2>
-            {loadingAi ? (
-              <div className="space-y-3">
-                <div className="h-4 bg-emerald-700 rounded w-3/4 animate-pulse"></div>
-                <div className="h-4 bg-emerald-700 rounded w-1/2 animate-pulse"></div>
-              </div>
-            ) : (
-              <p className="text-emerald-50 leading-relaxed text-lg italic">
-                {aiInsight || "Processando dados da Comunidade de Varginha..."}
-              </p>
-            )}
+      {/* 4 Indicadores Principais */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        {/* Sócios */}
+        <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-4">
+          <div className="p-3 bg-emerald-50 text-emerald-600 rounded-xl">
+            <UsersIcon className="w-6 h-6" />
           </div>
-          <WaterDropIcon className="absolute -bottom-10 -right-10 w-64 h-64 text-emerald-700 opacity-20 rotate-12" />
+          <div>
+            <p className="text-xs font-semibold text-gray-500 uppercase">Sócios Cadastrados</p>
+            <p className="text-2xl font-bold text-gray-900 mt-0.5">{members.length}</p>
+            <p className="text-xs text-emerald-600 mt-0.5 font-medium">{activeMembers} ativos</p>
+          </div>
         </div>
 
-        <div className="bg-white rounded-3xl p-8 shadow-sm border border-gray-100">
-            <h3 className="text-xl font-bold text-gray-900 mb-6 uppercase text-xs tracking-widest">Status dos Sócios</h3>
-            <div className="space-y-6">
-                {Object.values(MemberStatus).map(status => {
-                    const count = members.filter(m => m.status === status).length;
-                    const pct = members.length > 0 ? (count / members.length) * 100 : 0;
-                    return (
-                        <div key={status}>
-                            <div className="flex justify-between text-sm mb-2">
-                                <span className="font-semibold text-gray-600">{status}</span>
-                                <span className="font-bold text-gray-900">{count}</span>
-                            </div>
-                            <div className="w-full bg-gray-100 rounded-full h-2">
-                                <div 
-                                    className={`h-2 rounded-full transition-all duration-1000 ${
-                                        status === 'Ativo' ? 'bg-emerald-500' : 'bg-gray-400'
-                                    }`} 
-                                    style={{ width: `${pct}%` }}
-                                ></div>
-                            </div>
-                        </div>
-                    );
-                })}
+        {/* Consumo */}
+        <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-4">
+          <div className="p-3 bg-blue-50 text-blue-600 rounded-xl">
+            <WaterDropIcon className="w-6 h-6" />
+          </div>
+          <div>
+            <p className="text-xs font-semibold text-gray-500 uppercase">Consumo Total</p>
+            <p className="text-2xl font-bold text-gray-900 mt-0.5">{(totalConsumption || 0).toFixed(0)} <span className="text-sm font-normal text-gray-500">m³</span></p>
+            <p className="text-xs text-gray-500 mt-0.5">Medição acumulada</p>
+          </div>
+        </div>
+
+        {/* Preço Rateio */}
+        <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-4">
+          <div className="p-3 bg-indigo-50 text-indigo-600 rounded-xl">
+            <CogIcon className="w-6 h-6" />
+          </div>
+          <div>
+            <p className="text-xs font-semibold text-gray-500 uppercase">Preço do m³</p>
+            <p className="text-2xl font-bold text-gray-900 mt-0.5">R$ {currentRateio.toFixed(4)}</p>
+            <p className="text-xs text-gray-500 mt-0.5">Último rateio de energia</p>
+          </div>
+        </div>
+
+        {/* Pendências */}
+        <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-4">
+          <div className="p-3 bg-amber-50 text-amber-600 rounded-xl">
+            <DollarSignIcon className="w-6 h-6" />
+          </div>
+          <div>
+            <p className="text-xs font-semibold text-gray-500 uppercase">A Receber</p>
+            <p className="text-2xl font-bold text-gray-900 mt-0.5">R$ {pendingAmount.toFixed(2)}</p>
+            <p className="text-xs text-amber-600 mt-0.5 font-medium">{pendingDues.length} pendentes</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Atalhos Rápidos e Resumo Simples */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Acesso Rápido */}
+        <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm lg:col-span-2">
+          <h2 className="text-base font-bold text-gray-900 mb-4">Ações Rápidas</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <button
+              onClick={() => onNavigate?.('readings')}
+              className="flex items-center gap-3 p-4 rounded-xl border border-gray-200 hover:border-emerald-500 hover:bg-emerald-50 transition-colors text-left"
+            >
+              <div className="p-2.5 bg-emerald-100 text-emerald-700 rounded-lg shrink-0">
+                <WaterDropIcon className="w-5 h-5" />
+              </div>
+              <div>
+                <p className="font-semibold text-sm text-gray-900">Leituras de Hidrômetros</p>
+                <p className="text-xs text-gray-500 mt-0.5">Lançar consumo e gerar faturas</p>
+              </div>
+            </button>
+
+            <button
+              onClick={() => onNavigate?.('members')}
+              className="flex items-center gap-3 p-4 rounded-xl border border-gray-200 hover:border-emerald-500 hover:bg-emerald-50 transition-colors text-left"
+            >
+              <div className="p-2.5 bg-emerald-100 text-emerald-700 rounded-lg shrink-0">
+                <UsersIcon className="w-5 h-5" />
+              </div>
+              <div>
+                <p className="font-semibold text-sm text-gray-900">Lista de Sócios</p>
+                <p className="text-xs text-gray-500 mt-0.5">Ver cadastros e imprimir carteirinhas</p>
+              </div>
+            </button>
+
+            <button
+              onClick={() => onNavigate?.('financials')}
+              className="flex items-center gap-3 p-4 rounded-xl border border-gray-200 hover:border-emerald-500 hover:bg-emerald-50 transition-colors text-left"
+            >
+              <div className="p-2.5 bg-emerald-100 text-emerald-700 rounded-lg shrink-0">
+                <DollarSignIcon className="w-5 h-5" />
+              </div>
+              <div>
+                <p className="font-semibold text-sm text-gray-900">Financeiro & Faturas</p>
+                <p className="text-xs text-gray-500 mt-0.5">Dar baixa e controlar recebimentos</p>
+              </div>
+            </button>
+
+            <button
+              onClick={() => onNavigate?.('calendar')}
+              className="flex items-center gap-3 p-4 rounded-xl border border-gray-200 hover:border-emerald-500 hover:bg-emerald-50 transition-colors text-left"
+            >
+              <div className="p-2.5 bg-emerald-100 text-emerald-700 rounded-lg shrink-0">
+                <CalendarIcon className="w-5 h-5" />
+              </div>
+              <div>
+                <p className="font-semibold text-sm text-gray-900">Agenda & Reuniões</p>
+                <p className="text-xs text-gray-500 mt-0.5">Próxima: {nextMeeting}</p>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        {/* Resumo do Último Rateio */}
+        <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex flex-col justify-between">
+          <div>
+            <h2 className="text-base font-bold text-gray-900 mb-4">Último Fechamento</h2>
+            <div className="space-y-3 text-sm">
+              <div className="flex justify-between py-2 border-b border-gray-100">
+                <span className="text-gray-500">Mês de Referência</span>
+                <span className="font-semibold text-gray-900">{lastReference}</span>
+              </div>
+              <div className="flex justify-between py-2 border-b border-gray-100">
+                <span className="text-gray-500">Conta de Energia</span>
+                <span className="font-semibold text-gray-900">R$ {lastEnergyBill.toFixed(2)}</span>
+              </div>
+              <div className="flex justify-between py-2 border-b border-gray-100">
+                <span className="text-gray-500">Preço Calculado</span>
+                <span className="font-semibold text-emerald-700">R$ {currentRateio.toFixed(4)} / m³</span>
+              </div>
+              <div className="flex justify-between py-2">
+                <span className="text-gray-500">Recebido até agora</span>
+                <span className="font-semibold text-green-600">R$ {paidAmount.toFixed(2)}</span>
+              </div>
             </div>
+          </div>
+
+          <div className="mt-4 pt-4 border-t border-gray-100">
+            <button
+              onClick={() => onNavigate?.('readings')}
+              className="w-full text-center text-xs font-semibold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 py-2.5 rounded-xl transition-colors"
+            >
+              Abrir Leituras do Mês →
+            </button>
+          </div>
         </div>
       </div>
     </div>
   );
 };
+

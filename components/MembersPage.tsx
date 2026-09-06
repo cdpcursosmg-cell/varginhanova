@@ -144,12 +144,14 @@ export const MembersPage: React.FC<MembersPageProps> = ({ members, onAddMember, 
   const [editingMember, setEditingMember] = useState<Member | null>(null);
 
   const filteredMembers = useMemo(() => {
-    return members.filter(member => {
-      const matchesSearch = member.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                            member.cpf.includes(searchTerm);
-      const matchesStatus = statusFilter === 'all' || member.status === statusFilter;
-      return matchesSearch && matchesStatus;
-    });
+    return members
+      .filter(member => {
+        const matchesSearch = member.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                              member.cpf.includes(searchTerm);
+        const matchesStatus = statusFilter === 'all' || member.status === statusFilter;
+        return matchesSearch && matchesStatus;
+      })
+      .sort((a, b) => a.name.localeCompare(b.name, 'pt-BR', { sensitivity: 'base' }));
   }, [members, searchTerm, statusFilter]);
   
   const handleEdit = (member: Member) => {

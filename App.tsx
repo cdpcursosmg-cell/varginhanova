@@ -18,98 +18,100 @@ export const importedData = [
     { name: "ADÃO DA DOMINGA", prev: 680, curr: 690 },
     { name: "ADELAIDE P, SIQUEIRA", prev: 2124, curr: 2148 },
     { name: "ADENILSON PEREIRA SIQUEIRA(BRANCO", prev: 1508, curr: 1521 },
-    { name: "APARECIDA", prev: 50, curr: 58 },
     { name: "ALISSON MARTINS(ALISSON DO JOÃO", prev: 1381, curr: 1394 },
     { name: "ANA FERREIRA FRAGA(CARNEIRO)", prev: 1579, curr: 1587 },
-    { name: "PAULIN DA GERALDA(BEBEDOR)", prev: 0, curr: 0 },
+    { name: "ANDREIA", prev: 0, curr: 0 },
+    { name: "APARECIDA", prev: 50, curr: 58 },
     { name: "ARLINDO RIBEIRO", prev: 1421, curr: 1432 },
     { name: "ARMANDO DE BRITO", prev: 1280, curr: 1289 },
-    { name: "ANDREIA", prev: 0, curr: 0 },
+    { name: "AUGUSTO BB", prev: 0, curr: 539 },
     { name: "AUGUSTO DIAS MACHADO", prev: 861, curr: 869 },
     { name: "CARMITA", prev: 933, curr: 947 },
+    { name: "CASSIO DA LURDINHA", prev: 269, curr: 276 },
     { name: "CATULINA SOARES", prev: 1102, curr: 1113 },
     { name: "CECINA", prev: 1014, curr: 1021 },
     { name: "CELINO DIAS MACHADO", prev: 1143, curr: 1147 },
+    { name: "DAVI SOUZA", prev: 872, curr: 872 },
     { name: "DELSON DO PAULO", prev: 57, curr: 68 },
+    { name: "DETE", prev: 0, curr: 1190 },
+    { name: "DEZIN", prev: 0, curr: 66 },
+    { name: "DIJALMA", prev: 323, curr: 326 },
     { name: "DINALVA MENDES DE OLIVEIRA", prev: 1005, curr: 1008 },
     { name: "DOMINGOS DIAS MACHADO", prev: 0, curr: 1657 },
     { name: "EDILEUZA MENDES DE OLIVEIRA", prev: 1043, curr: 1458 },
     { name: "ESCOLA MUNICIPAL", prev: 430, curr: 436 },
     { name: "FABIO DE OLIVEIRA", prev: 375, curr: 383 },
     { name: "FARLEY DO SI", prev: 666, curr: 672 },
+    { name: "FLAVIO", prev: 598, curr: 598 },
     { name: "GENEROSO FERREIRA FRAGA", prev: 2017, curr: 2050 },
     { name: "GENTIL MENDES DE OLIVEIRA", prev: 1442, curr: 1458 },
-    { name: "NILZA MARTINS", prev: 1168, curr: 1176 },
-    { name: "DAVI SOUZA", prev: 872, curr: 872 },
+    { name: "GILMAR DA MADALENA", prev: 451, curr: 451 },
+    { name: "GILMAR DE PAULA", prev: 2759, curr: 2769 },
+    { name: "GIULIANO", prev: 472, curr: 479 },
     { name: "HAMILTON RIBEIRO(MILTIN)BEBEDOR", prev: 1080, curr: 1341 },
     { name: "IGREJA", prev: 148, curr: 151 },
+    { name: "JAQUINA FERREIRA FRAGA", prev: 563, curr: 572 },
+    { name: "JERSON", prev: 40, curr: 40 },
+    { name: "JO", prev: 13, curr: 34 },
+    { name: "JOAO CARNEIRO BB", prev: 0, curr: 47 },
     { name: "JOÃO DO DOMINGÃO(BEBEDOR)", prev: 327, curr: 334 },
     { name: "JOÃO DO DOMINGAO(CASA)", prev: 940, curr: 347 },
-    { name: "JAQUINA FERREIRA FRAGA", prev: 563, curr: 572 },
-    { name: "CASSIO DA LURDINHA", prev: 269, curr: 276 },
     { name: "JOSE ANTONIO(J DIAS)", prev: 1107, curr: 1107 },
     { name: "JOSÉ AUTHUR M. OLIVEIRA", prev: 415, curr: 416 },
-    { name: "JOSE DOS REIS(MARCELO)", prev: 748, curr: 739 },
     { name: "JOSE DOS REIS D. MACHADO(TETA)", prev: 1280, curr: 1220 },
-    { name: "LUCIMAR", prev: 1734, curr: 1749 },
+    { name: "JOSE DOS REIS(MARCELO)", prev: 748, curr: 739 },
     { name: "JOSE LUIZ F. QUEIROZ(ZEQUINHA)", prev: 1808, curr: 1821 },
     { name: "JOSE MANOEL MENDES(BEBEDOR)", prev: 0, curr: 269 },
     { name: "JOSE OSCAR M. OLIVEIRA", prev: 1081, curr: 1090 },
     { name: "JOSE PAULO P. S. (PAULIN DA GERALDA)", prev: 226, curr: 460 },
+    { name: "JU DO CAZIM", prev: 17, curr: 37 },
+    { name: "JULIO", prev: 0, curr: 3133 },
+    { name: "JUNIO LOPES", prev: 368, curr: 388 },
+    { name: "LEO BOMBEIRO", prev: 238, curr: 241 },
+    { name: "LIN BB", prev: 0, curr: 144 },
+    { name: "LORIVALDO (BOTECO)", prev: 135, curr: 137 },
     { name: "LOURIVALDO", prev: 0, curr: 1981 },
     { name: "LUCIA DO SI", prev: 66, curr: 667 },
     { name: "LUCILIO DE VÔ", prev: 86, curr: 87 },
+    { name: "LUCIMAR", prev: 1734, curr: 1749 },
     { name: "LUIZÃO BAIANO", prev: 241, curr: 244 },
     { name: "MANOEL DO ORLINDO", prev: 258, curr: 258 },
     { name: "MARCIO(ZILENE)", prev: 890, curr: 1906 },
-    { name: "JULIO", prev: 0, curr: 3133 },
+    { name: "MARCIO(ZILENE)", prev: 147, curr: 150 },
     { name: "MARIA ANUNCIAÇÃO", prev: 1073, curr: 1509 },
     { name: "MARIA DOS SANTOS LOPES G.", prev: 1493, curr: 1503 },
     { name: "MARIA SELMA(SELMA DO ZÉ ELIAS)", prev: 394, curr: 402 },
+    { name: "NEI", prev: 33, curr: 33 },
+    { name: "NELZITA BB", prev: 0, curr: 31 },
     { name: "NELZITA MENDES DE OLIVEIRA", prev: 1883, curr: 1905 },
+    { name: "NILTIN MENDES", prev: 0, curr: 157 },
     { name: "NILTON MENDES DE OLIVEIRA", prev: 1080, curr: 1004 },
+    { name: "NILZA MARTINS", prev: 1168, curr: 1176 },
     { name: "OLIMPIO MENDES DE OLIVEIRA", prev: 596, curr: 600 },
     { name: "OSMAR DO CAREIRO", prev: 468, curr: 469 },
-    { name: "RENLSON", prev: 1031, curr: 1035 },
+    { name: "PAULIN DA GERALDA(BEBEDOR)", prev: 0, curr: 0 },
     { name: "PAULINHO DA SI", prev: 844, curr: 844 },
     { name: "PAULO FERNANDES DA SILVA", prev: 2099, curr: 2111 },
     { name: "PEDRO PAULA", prev: 1498, curr: 1509 },
-    { name: "JOAO CARNEIRO BB", prev: 0, curr: 47 },
+    { name: "RAI", prev: 42, curr: 42 },
+    { name: "RENLSON", prev: 1031, curr: 1035 },
+    { name: "ROBERTO", prev: 143, curr: 145 },
     { name: "ROSANA", prev: 0, curr: 1006 },
     { name: "SABINO", prev: 1308, curr: 1303 },
+    { name: "SELSO BB", prev: 0, curr: 211 },
+    { name: "SI (BEBEDOR)", prev: 284, curr: 285 },
+    { name: "SILVESTRE", prev: 0, curr: 397 },
     { name: "SUELANE", prev: 23, curr: 35 },
     { name: "SUELI FERREIRA LIMA", prev: 363, curr: 366 },
     { name: "TEREZINHA PEREIRA(TÊ)", prev: 771, curr: 790 },
     { name: "TONI DA ZENA", prev: 1811, curr: 1822 },
     { name: "VALDEMAR (DEMA)", prev: 784, curr: 791 },
-    { name: "GILMAR DA MADALENA", prev: 451, curr: 451 },
+    { name: "VALDETI BEBEDOR", prev: 807, curr: 816 },
+    { name: "VALDETI CASA", prev: 793, curr: 808 },
     { name: "VANDERLEI RIBEIRO", prev: 718, curr: 1190 },
     { name: "VILMAR DE OLIVEIRA ( BEBEDOR)", prev: 1113, curr: 207 },
     { name: "VILMAR DE OLIVEIRA (CASA)", prev: 207, curr: 1121 },
-    { name: "LORIVALDO (BOTECO)", prev: 135, curr: 137 },
-    { name: "ROBERTO", prev: 143, curr: 145 },
-    { name: "MARCIO(ZILENE)", prev: 147, curr: 150 },
-    { name: "JUNIO LOPES", prev: 368, curr: 388 },
-    { name: "RAI", prev: 42, curr: 42 },
-    { name: "DIJALMA", prev: 323, curr: 326 },
-    { name: "SILVESTRE", prev: 0, curr: 397 },
-    { name: "GILMAR DE PAULA", prev: 2759, curr: 2769 },
-    { name: "GIULIANO", prev: 472, curr: 479 },
-    { name: "FLAVIO", prev: 598, curr: 598 },
-    { name: "VALDETI CASA", prev: 793, curr: 808 },
-    { name: "VALDETI BEBEDOR", prev: 807, curr: 816 },
-    { name: "ZE ELIAS", prev: 0, curr: 1690 },
-    { name: "JERSON", prev: 40, curr: 40 },
-    { name: "SI (BEBEDOR)", prev: 284, curr: 285 },
-    { name: "LEO BOMBEIRO", prev: 238, curr: 241 },
-    { name: "DETE", prev: 0, curr: 1190 },
-    { name: "NEI", prev: 33, curr: 33 },
-    { name: "AUGUSTO BB", prev: 0, curr: 539 },
-    { name: "NELZITA BB", prev: 0, curr: 31 },
-    { name: "SELSO BB", prev: 0, curr: 211 },
-    { name: "LIN BB", prev: 0, curr: 144 },
-    { name: "NILTIN MENDES", prev: 0, curr: 157 },
-    { name: "DEZIN", prev: 0, curr: 66 }
+    { name: "ZE ELIAS", prev: 0, curr: 1690 }
 ];
 
 const DEFAULT_WATER_PRICE = 1.50;
@@ -153,28 +155,33 @@ const App: React.FC = () => {
   
   const [members, setMembers] = usePersistentState<Member[]>('app_members_v10', initialMembers);
 
-  // Auto-sincronizar novos membros da lista oficial com o estado persistente
+  // Auto-sincronizar novos membros da lista oficial com o estado persistente e ordenar alfabeticamente
   useEffect(() => {
     const normalize = (s: string) => s.toUpperCase().trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^A-Z0-9]/g, "");
     setMembers(prev => {
       const existingNames = new Set(prev.map(m => normalize(m.name)));
       const missing = importedData.filter(d => !existingNames.has(normalize(d.name)));
-      if (missing.length === 0) return prev;
       
-      const newMembers: Member[] = missing.map((d, index) => ({
-        id: `m_${Date.now()}_${index}`,
-        name: d.name,
-        initialReading: d.prev,
-        cpf: `000.000.000-00`,
-        address: 'Comunidade de Varginha',
-        email: '',
-        phone: '',
-        joinDate: '2026-03-01',
-        category: 'Produtor',
-        status: MemberStatus.Ativo,
-        naturalness: 'São João da Ponte – MG'
-      }));
-      return [...prev, ...newMembers];
+      const combined = missing.length > 0
+        ? [
+            ...prev,
+            ...missing.map((d, index) => ({
+              id: `m_${Date.now()}_${index}`,
+              name: d.name,
+              initialReading: d.prev,
+              cpf: `000.000.000-00`,
+              address: 'Comunidade de Varginha',
+              email: '',
+              phone: '',
+              joinDate: '2026-03-01',
+              category: 'Produtor',
+              status: MemberStatus.Ativo,
+              naturalness: 'São João da Ponte – MG'
+            }))
+          ]
+        : [...prev];
+
+      return combined.sort((a, b) => a.name.localeCompare(b.name, 'pt-BR', { sensitivity: 'base' }));
     });
   }, [setMembers]);
   const [dues, setDues] = usePersistentState<MembershipDue[]>('app_dues_v10', []);
@@ -185,11 +192,11 @@ const App: React.FC = () => {
 
   const addMember = (memberData: Omit<Member, 'id'>) => {
     const newMember: Member = { id: `m_${Date.now()}`, ...memberData };
-    setMembers([...members, newMember]);
+    setMembers(prev => [...prev, newMember].sort((a, b) => a.name.localeCompare(b.name, 'pt-BR', { sensitivity: 'base' })));
   };
 
   const updateMember = (updatedMember: Member) => {
-    setMembers(prev => prev.map(m => m.id === updatedMember.id ? updatedMember : m));
+    setMembers(prev => prev.map(m => m.id === updatedMember.id ? updatedMember : m).sort((a, b) => a.name.localeCompare(b.name, 'pt-BR', { sensitivity: 'base' })));
   };
 
   const addExpense = (expenseData: Omit<Expense, 'id'>) => {
@@ -284,7 +291,14 @@ const App: React.FC = () => {
         </header>
 
         <div className="flex-1 overflow-y-auto focus:outline-none scroll-smooth">
-          {activeView === 'dashboard' && <DashboardPage members={members} dues={dues} meetings={meetings} />}
+          {activeView === 'dashboard' && (
+            <DashboardPage 
+              members={members} 
+              dues={dues} 
+              meetings={meetings} 
+              onNavigate={(view) => setActiveView(view)} 
+            />
+          )}
           {activeView === 'members' && <MembersPage members={members} onAddMember={addMember} onUpdateMember={updateMember} />}
           {activeView === 'readings' && (
             <WaterReadingsPage 
