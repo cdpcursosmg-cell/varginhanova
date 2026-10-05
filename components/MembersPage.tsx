@@ -1,7 +1,7 @@
 
 import React, { useState, useMemo, useEffect } from 'react';
 import { Member, MemberStatus } from '../types';
-import { SearchIcon, PlusIcon, UsersIcon, DownloadIcon, CogIcon } from './Icons';
+import { SearchIcon, PlusIcon, UsersIcon, DownloadIcon, CogIcon, WaterDropIcon } from './Icons';
 import Modal from './common/Modal';
 import * as XLSX from 'xlsx';
 import { importedData } from '../App';
@@ -10,6 +10,7 @@ interface MembersPageProps {
   members: Member[];
   onAddMember: (member: Omit<Member, 'id'>) => void;
   onUpdateMember: (member: Member) => void;
+  onNavigate?: (view: any) => void;
 }
 
 const MemberStatusBadge: React.FC<{ status: MemberStatus }> = ({ status }) => {
@@ -137,7 +138,7 @@ const MemberForm: React.FC<{ initialData?: Member | null, onSave: (member: any) 
     );
 };
 
-export const MembersPage: React.FC<MembersPageProps> = ({ members, onAddMember, onUpdateMember }) => {
+export const MembersPage: React.FC<MembersPageProps> = ({ members, onAddMember, onUpdateMember, onNavigate }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<MemberStatus | 'all'>('all');
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -255,9 +256,19 @@ export const MembersPage: React.FC<MembersPageProps> = ({ members, onAddMember, 
         <MemberForm initialData={editingMember} onSave={handleSave} onClose={() => setIsModalOpen(false)} />
        </Modal>
        
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex flex-wrap justify-between items-center gap-4 mb-6">
         <h1 className="text-3xl font-bold text-gray-800">Sócios Cadastrados</h1>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
+            {onNavigate && (
+              <button 
+                onClick={() => onNavigate('readingsList')} 
+                className="flex items-center gap-2 px-4 py-2 bg-emerald-700 text-white font-semibold rounded-lg shadow-sm hover:bg-emerald-800 transition-colors"
+                title="Ver lista de todos os usuários com as leituras de hidrômetros"
+              >
+                <WaterDropIcon className="w-5 h-5" />
+                Ver com Leituras (A-Z)
+              </button>
+            )}
             <button onClick={exportToCSV} className="flex items-center gap-2 px-4 py-2 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-lg shadow-sm hover:bg-emerald-100 transition-colors">
                 <DownloadIcon className="w-5 h-5" />
                 CSV

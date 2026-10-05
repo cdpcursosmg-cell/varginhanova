@@ -1,13 +1,13 @@
 
 import React from 'react';
 import { Member, MembershipDue, Meeting, MemberStatus, PaymentStatus } from '../types';
-import { UsersIcon, DollarSignIcon, WaterDropIcon, CalendarIcon, CogIcon } from './Icons';
+import { UsersIcon, DollarSignIcon, WaterDropIcon, CalendarIcon, CogIcon, ClipboardListIcon } from './Icons';
 
 interface DashboardPageProps {
   members: Member[];
   dues: MembershipDue[];
   meetings: Meeting[];
-  onNavigate?: (view: 'members' | 'readings' | 'financials' | 'calendar' | 'backup') => void;
+  onNavigate?: (view: 'members' | 'readings' | 'readingsList' | 'financials' | 'calendar' | 'backup') => void;
 }
 
 export const DashboardPage: React.FC<DashboardPageProps> = ({ members, dues, meetings, onNavigate }) => {
@@ -102,6 +102,22 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ members, dues, mee
           <h2 className="text-base font-bold text-gray-900 mb-4">Ações Rápidas</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <button
+              onClick={() => onNavigate?.('readingsList')}
+              className="flex items-center gap-3 p-4 rounded-xl border-2 border-emerald-500 bg-emerald-50/50 hover:bg-emerald-100/60 transition-colors text-left sm:col-span-2"
+            >
+              <div className="p-2.5 bg-emerald-600 text-white rounded-lg shrink-0">
+                <ClipboardListIcon className="w-5 h-5" />
+              </div>
+              <div className="flex-1">
+                <div className="flex items-center gap-2">
+                  <p className="font-bold text-sm text-emerald-950">Lista Geral de Sócios com Leituras</p>
+                  <span className="bg-emerald-200 text-emerald-800 text-[10px] font-black px-2 py-0.5 rounded-full uppercase">Ordem A-Z</span>
+                </div>
+                <p className="text-xs text-emerald-700 mt-0.5">Tabela completa com leitura anterior, atual, consumo (m³) e impressão de relatórios</p>
+              </div>
+            </button>
+
+            <button
               onClick={() => onNavigate?.('readings')}
               className="flex items-center gap-3 p-4 rounded-xl border border-gray-200 hover:border-emerald-500 hover:bg-emerald-50 transition-colors text-left"
             >
@@ -109,8 +125,8 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ members, dues, mee
                 <WaterDropIcon className="w-5 h-5" />
               </div>
               <div>
-                <p className="font-semibold text-sm text-gray-900">Leituras de Hidrômetros</p>
-                <p className="text-xs text-gray-500 mt-0.5">Lançar consumo e gerar faturas</p>
+                <p className="font-semibold text-sm text-gray-900">Lançamento de Leituras</p>
+                <p className="text-xs text-gray-500 mt-0.5">Digitar consumo mensal e rateio</p>
               </div>
             </button>
 

@@ -18,6 +18,7 @@ interface WaterReadingsPageProps {
   setWaterPrice: (price: number) => void;
   serviceFee: number;
   setServiceFee: (fee: number) => void;
+  onNavigate?: (view: any) => void;
 }
 
 const getMonthName = (monthIndex: number) => {
@@ -138,7 +139,8 @@ export const WaterReadingsPage: React.FC<WaterReadingsPageProps> = ({
     waterPrice,
     setWaterPrice,
     serviceFee,
-    setServiceFee
+    setServiceFee,
+    onNavigate
 }) => {
   const [selectedDate, setSelectedDate] = useState(new Date(2026, 2, 1)); 
   const [customDueDate, setCustomDueDate] = useState('2026-04-10');
@@ -437,7 +439,16 @@ export const WaterReadingsPage: React.FC<WaterReadingsPageProps> = ({
                 </h1>
                 <p className="text-gray-500">Fazenda Mamonas - Gestão Hídrica</p>
             </div>
-            <div className="flex gap-4">
+            <div className="flex flex-wrap gap-3 items-center">
+                {onNavigate && (
+                    <button 
+                        onClick={() => onNavigate('readingsList')}
+                        className="flex items-center gap-2 px-4 py-2 bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-sm hover:bg-emerald-800 transition-colors h-fit self-center"
+                    >
+                        <WaterDropIcon className="w-4 h-4" />
+                        Ver Lista de Leituras (A-Z)
+                    </button>
+                )}
                 <button 
                     onClick={exportReadingsToCSV}
                     className="flex items-center gap-2 px-4 py-2 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-xl shadow-sm hover:bg-emerald-100 transition-colors h-fit self-center"

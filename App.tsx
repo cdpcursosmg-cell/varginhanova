@@ -6,7 +6,8 @@ import { FinancialsPage } from './components/FinancialsPage';
 import { CalendarPage } from './components/CalendarPage';
 import { DashboardPage } from './components/DashboardPage';
 import { WaterReadingsPage } from './components/WaterReadingsPage';
-import { UsersIcon, DollarSignIcon, CalendarIcon, DashboardIcon, WaterDropIcon, CogIcon } from './components/Icons';
+import { ReadingsListPage } from './components/ReadingsListPage';
+import { UsersIcon, DollarSignIcon, CalendarIcon, DashboardIcon, WaterDropIcon, CogIcon, ClipboardListIcon } from './components/Icons';
 import { BackupPage } from './components/BackupPage';
 
 const ASSOC_NAME = "COMUNIDADE DE VARGINHA";
@@ -35,6 +36,7 @@ export const importedData = [
     { name: "DELSON DO PAULO", prev: 57, curr: 68 },
     { name: "DETE", prev: 0, curr: 1190 },
     { name: "DEZIN", prev: 0, curr: 66 },
+    { name: "DIGO", prev: 13, curr: 34 },
     { name: "DIJALMA", prev: 323, curr: 326 },
     { name: "DINALVA MENDES DE OLIVEIRA", prev: 1005, curr: 1008 },
     { name: "DOMINGOS DIAS MACHADO", prev: 0, curr: 1657 },
@@ -148,7 +150,7 @@ const usePersistentState = <T,>(key: string, initialValue: T): [T, React.Dispatc
   return [state, setState];
 };
 
-type View = 'dashboard' | 'members' | 'readings' | 'financials' | 'calendar' | 'backup';
+type View = 'dashboard' | 'members' | 'readings' | 'readingsList' | 'financials' | 'calendar' | 'backup';
 
 const App: React.FC = () => {
   const [activeView, setActiveView] = useState<View>('dashboard');
@@ -233,7 +235,8 @@ const App: React.FC = () => {
   const sidebarItems = [
     { id: 'dashboard', label: 'Início', icon: <DashboardIcon /> },
     { id: 'members', label: 'Sócios', icon: <UsersIcon /> },
-    { id: 'readings', label: 'Água / Leituras', icon: <WaterDropIcon /> },
+    { id: 'readingsList', label: 'Lista de Leituras', icon: <ClipboardListIcon /> },
+    { id: 'readings', label: 'Lançar Leituras', icon: <WaterDropIcon /> },
     { id: 'financials', label: 'Financeiro', icon: <DollarSignIcon /> },
     { id: 'calendar', label: 'Agenda', icon: <CalendarIcon /> },
     { id: 'backup', label: 'Configurações', icon: <CogIcon /> },
@@ -299,7 +302,16 @@ const App: React.FC = () => {
               onNavigate={(view) => setActiveView(view)} 
             />
           )}
-          {activeView === 'members' && <MembersPage members={members} onAddMember={addMember} onUpdateMember={updateMember} />}
+          {activeView === 'members' && <MembersPage members={members} onAddMember={addMember} onUpdateMember={updateMember} onNavigate={(view) => setActiveView(view)} />}
+          {activeView === 'readingsList' && (
+            <ReadingsListPage 
+              members={members} 
+              dues={dues} 
+              waterPrice={waterPrice} 
+              serviceFee={serviceFee}
+              onNavigate={(view) => setActiveView(view)}
+            />
+          )}
           {activeView === 'readings' && (
             <WaterReadingsPage 
               members={members} dues={dues} 
@@ -308,6 +320,7 @@ const App: React.FC = () => {
               onDeleteMultipleDues={deleteMultipleDues}
               waterPrice={waterPrice} setWaterPrice={setWaterPrice}
               serviceFee={serviceFee} setServiceFee={setServiceFee}
+              onNavigate={(view) => setActiveView(view)}
             />
           )}
           {activeView === 'financials' && (
