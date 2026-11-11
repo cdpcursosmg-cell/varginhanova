@@ -40,6 +40,7 @@ export const importedData = [
     { name: "DIJALMA", prev: 323, curr: 326 },
     { name: "DINALVA MENDES DE OLIVEIRA", prev: 1005, curr: 1008 },
     { name: "DOMINGOS DIAS MACHADO", prev: 0, curr: 1657 },
+    { name: "EDE", prev: 138, curr: 159 },
     { name: "EDILEUZA MENDES DE OLIVEIRA", prev: 1043, curr: 1458 },
     { name: "ESCOLA MUNICIPAL", prev: 430, curr: 436 },
     { name: "FABIO DE OLIVEIRA", prev: 375, curr: 383 },
